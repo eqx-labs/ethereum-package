@@ -4,12 +4,12 @@
 2. [Install the Kurtosis CLI, or upgrade it to the latest version if it's already installed][kurtosis-cli-installation]
 3. Run the package with default configurations from the command line:
 ```bash
-git clone https://github.com/whereasjovially/ethereum-package.git
+git clone https://github.com/interstate-labs/ethereum-package.git
 cd ethereum-package
 kurtosis run --enclave interstate-devnet ./ --args-file network_params.yaml
 ```
 
 If you don't want clone
 ```bash
-kurtosis run --enclave interstate-devnet github.com/whereasjovially/ethereum-package --args-file network_params.yaml
+kurtosis run --enclave interstate-devnet github.com/interstate-labs/ethereum-package --args-file network_params.yaml
 ```
