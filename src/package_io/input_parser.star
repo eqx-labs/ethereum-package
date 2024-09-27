@@ -237,6 +237,7 @@ def input_parser(plan, input_args):
             preset=result["network_params"]["preset"],
         ),
         mev_params=struct(
+            helix_relay_image=result["mev_params"]["helix_relay_image"],
             mev_relay_image=result["mev_params"]["mev_relay_image"],
             mev_builder_image=result["mev_params"]["mev_builder_image"],
             mev_builder_cl_image=result["mev_params"]["mev_builder_cl_image"],

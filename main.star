@@ -31,6 +31,7 @@ grafana = import_module("./src/grafana/grafana_launcher.star")
 mev_boost = import_module("./src/mev/mev_boost/mev_boost_launcher.star")
 mock_mev = import_module("./src/mev/mock_mev/mock_mev_launcher.star")
 mev_relay = import_module("./src/mev/mev_relay/mev_relay_launcher.star")
+helix_relay = import_module("./src/mev/mev_relay/helix_launcher.star")
 mev_flood = import_module("./src/mev/mev_flood/mev_flood_launcher.star")
 mev_custom_flood = import_module(
     "./src/mev/mev_custom_flood/mev_custom_flood_launcher.star"
@@ -237,15 +238,16 @@ def run(plan, args={}):
             timeout="20m",
             service_name=first_client_beacon_name,
         )
-        endpoint = mev_relay.launch_mev_relay(
+        endpoint = helix_relay.launch_helix_relay(
             plan,
             mev_params,
-            network_params.network_id,
+            network_params,
             beacon_uris,
             genesis_validators_root,
             builder_uri,
             network_params.seconds_per_slot,
             persistent,
+            final_genesis_timestamp,
             global_node_selectors,
         )
         mev_flood.spam_in_background(

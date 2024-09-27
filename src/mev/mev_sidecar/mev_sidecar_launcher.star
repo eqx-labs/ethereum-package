@@ -42,9 +42,9 @@ def launch_mev_sidecar(
                 "--private-key",
                 # Random private key for testing, generated with `openssl rand -hex 32`
                 "18d1c5302e734fd6fbfaa51828d42c4c6d3cbe020c42bab7dd15a2799cf00b82",
-                "--mevboost-url",
+                "--constraints-url",
                 mev_boost_context_util.mev_boost_endpoint(mev_boost_context),
-                "--mevboost-proxy-port",
+                "--constraints-proxy-port",
                 str(MEV_SIDECAR_BOOST_PROXY_PORT),
                 "--beacon-api-url",
                 beacon_api_url,
