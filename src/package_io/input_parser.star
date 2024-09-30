@@ -856,7 +856,8 @@ def enrich_mev_extra_params(parsed_arguments_dict, mev_prefix, mev_port, mev_typ
                 # TODO(maybe) make parts of this more passable like the mev-relay-endpoint & forks
                 "el_extra_params": [
                     "--builder",
-                    "--builder.remote_relay_endpoint=http://mev-relay-api:9062",
+                    # TODO: (thedevbirb) this should indeed more passable. Now hardcoded for Helix relay
+                    "--builder.remote_relay_endpoint=http://helix-relay:4040",
                     "--builder.beacon_endpoints=http://cl-{0}-lighthouse-geth-builder:4000".format(
                         index_str
                     ),
