@@ -35,7 +35,6 @@ REDIS_MAX_CPU = 1000
 REDIS_MIN_MEMORY = 16
 REDIS_MAX_MEMORY = 1024
 
-
 def launch_helix_relay(
     plan,
     mev_params,
@@ -79,7 +78,7 @@ def launch_helix_relay(
         image="timescale/timescaledb-ha:pg16",
         password="postgres",
         user="postgres",
-        database="postgres",
+        database="helixdb",
         service_name="helix-postgres",
         persistent=persistent,
         launch_adminer=True,
@@ -132,8 +131,13 @@ def launch_helix_relay(
 
     env_vars = {
         "RELAY_KEY": DUMMY_SECRET_KEY,
-        "RUST_LOG": "debug",
+        "RUST_LOG": "trace",
     }
+
+    # Sleep `network_params.seconds_per_slot * 32` seconds (1 epoch) + genesis_delay before starting the relay
+    sleep_time = network_params.seconds_per_slot * 32 + network_params.genesis_delay
+
+    plan.print("Sleeping for {0} seconds before starting the relay".format(sleep_time))
 
     helix = plan.add_service(
         name=SERVICE_NAME,

@@ -238,7 +238,7 @@ def run(plan, args={}):
             timeout="20m",
             service_name=first_client_beacon_name,
         )
-        endpoint = helix_relay.launch_helix_relay(
+        helix_endpoint = helix_relay.launch_helix_relay(
             plan,
             mev_params,
             network_params,
@@ -258,7 +258,7 @@ def run(plan, args={}):
             contract_owner.private_key,
             normal_user.private_key,
         )
-        mev_endpoints.append(endpoint)
+        mev_endpoints.append(helix_endpoint)
 
     # spin up the mev boost contexts if some endpoints for relays have been passed
     all_mevboost_contexts = []
