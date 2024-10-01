@@ -93,6 +93,7 @@ def launch_helix_relay(
 
     # Convert beacon_uris from a comma-separated string to a list of URIs
     beacon_uris = [uri.strip() for uri in beacon_uris.split(",")]
+    plan.print(beacon_uris)
 
     network_config_dir_path_on_service = "{0}/{1}".format(
         HELIX_CONFIG_MOUNT_DIRPATH_ON_SERVICE, HELIX_NETWORK_CONFIG_FILENAME

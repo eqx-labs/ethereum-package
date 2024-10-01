@@ -213,6 +213,7 @@ def run(plan, args={}):
         beacon_uris = ",".join(
             ["{0}".format(context.beacon_http_url) for context in all_cl_contexts]
         )
+        plan.print(beacon_uris)
 
         first_cl_client = all_cl_contexts[0]
         first_client_beacon_name = first_cl_client.beacon_service_name
