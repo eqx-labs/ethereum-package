@@ -131,13 +131,8 @@ def launch_helix_relay(
 
     env_vars = {
         "RELAY_KEY": DUMMY_SECRET_KEY,
-        "RUST_LOG": "trace",
+        "RUST_LOG": "RUST_LOG=helix_cmd=trace,helix_api=trace,helix_common=trace,helix_datastore=trace,helix_housekeeper=trace,helix_database=trace,helix_beacon_client=trace",
     }
-
-    # Sleep `network_params.seconds_per_slot * 32` seconds (1 epoch) + genesis_delay before starting the relay
-    sleep_time = network_params.seconds_per_slot * 32 + network_params.genesis_delay
-
-    plan.print("Sleeping for {0} seconds before starting the relay".format(sleep_time))
 
     helix = plan.add_service(
         name=SERVICE_NAME,
