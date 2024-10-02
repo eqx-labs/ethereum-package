@@ -126,6 +126,10 @@ def run(plan, args={}):
         )
     )
 
+    mev_sidecar_context=struct(
+        ip_addr="",
+        metrics_port_num=0,
+    )
     all_el_contexts = []
     all_cl_contexts = []
     all_vc_contexts = []
@@ -266,26 +270,31 @@ def run(plan, args={}):
                     MEV_BOOST_SHOULD_CHECK_RELAY,
                     mev_endpoints,
                 )
-                mev_boost_service_name = "{0}-{1}-{2}-{3}".format(
-                    input_parser.MEV_BOOST_SERVICE_NAME_PREFIX,
-                    index_str,
-                    participant.cl_type,
-                    participant.el_type,
-                )
-                mev_boost_context = mev_boost.launch(
-                    plan,
-                    mev_boost_launcher,
-                    mev_boost_service_name,
-                    network_params.network_id,
-                    mev_params.mev_boost_image,
-                    mev_params.mev_boost_args,
-                    global_node_selectors,
-                    network_params,
+                # mev_boost_service_name = "{0}-{1}-{2}-{3}".format(
+                #     input_parser.MEV_BOOST_SERVICE_NAME_PREFIX,
+                #     index_str,
+                #     participant.cl_type,
+                #     participant.el_type,
+                # )
+                # mev_boost_service_name = "cb_pbs"
+                # mev_boost_context = mev_boost.launch(
+                #     plan,
+                #     mev_boost_launcher,
+                #     mev_boost_service_name,
+                #     network_params.network_id,
+                #     mev_params.mev_boost_image,
+                #     mev_params.mev_boost_args,
+                #     global_node_selectors,
+                #     network_params,
+                # )
+                mev_boost_context = struct(
+                    private_ip_address="cb_pbs",
+                    port="18550",
                 )
                 all_mevboost_contexts.append(mev_boost_context)
 
                 # add mev-sidecar
-                mev_sidecar.launch_mev_sidecar(
+                mev_sidecar_ctx = mev_sidecar.launch_mev_sidecar(
                     plan,
                     mev_params,
                     global_node_selectors,
@@ -302,6 +311,7 @@ def run(plan, args={}):
                     raw_jwt_secret,
                     network_params.seconds_per_slot
                 )
+                mev_sidecar_context = mev_sidecar_ctx
 
     if len(args_with_right_defaults.additional_services) == 0:
         output = struct(
@@ -471,6 +481,7 @@ def run(plan, args={}):
             all_ethereum_metrics_exporter_contexts,
             all_xatu_sentry_contexts,
             global_node_selectors,
+            mev_sidecar_context,
         )
 
         plan.print("Launching grafana...")
