@@ -449,7 +449,7 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "{__name__=\"bolt_sidecar_local_blocks_proposed\", instance=\"172.16.0.25:9063\", job=\"mev-sidecar\"}"
+                  "{__name__=\"bolt_sidecar_local_blocks_proposed\", instance=\"172.16.0.25:9063\", job=\"bolt-sidecar\"}"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
