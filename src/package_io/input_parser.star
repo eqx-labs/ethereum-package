@@ -4,6 +4,7 @@ genesis_constants = import_module(
     "../prelaunch_data_generator/genesis_constants/genesis_constants.star"
 )
 bolt_sidecar = import_module("../mev/bolt_sidecar/bolt_sidecar_launcher.star")
+bolt_boost = import_module("../mev/bolt_boost/bolt_boost_launcher.star")
 
 DEFAULT_EL_IMAGES = {
     "geth": "ethereum/client-go:latest",
@@ -145,7 +146,7 @@ def input_parser(plan, input_args):
         result = enrich_mev_extra_params(
             result,
             MEV_BOOST_SERVICE_NAME_PREFIX,
-            bolt_sidecar.BOLT_SIDECAR_BOOST_PROXY_PORT,
+            bolt_boost.BOLT_BOOST_PORT,
             result.get("mev_type"),
         )
 

@@ -307,7 +307,7 @@ def run(plan, args={}):
                     }]
                     bolt_sidecar_config = {
                         "constraints_api_url": "{0}:{1}".format(
-                            bolt_sidecar.BOLT_SIDECAR_BASE_URL, bolt_sidecar.BOLT_SIDECAR_COMMITMENTS_API_PORT
+                            bolt_boost.BOLT_BOOST_BASE_URL, bolt_boost.BOLT_BOOST_PORT
                         ),
                         "beacon_api_url": all_cl_contexts[0].beacon_http_url,
                         "execution_api_url": "http://{0}:{1}".format(

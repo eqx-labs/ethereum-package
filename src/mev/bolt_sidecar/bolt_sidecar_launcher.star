@@ -1,12 +1,12 @@
 redis_module = import_module("github.com/kurtosis-tech/redis-package/main.star")
 postgres_module = import_module("github.com/kurtosis-tech/postgres-package/main.star")
 constants = import_module("../../package_io/constants.star")
+bolt_boost = import_module("../bolt_boost/bolt_boost_launcher.star")
 mev_boost_context_util = import_module("../mev_boost/mev_boost_context.star")
 
-BOLT_SIDECAR_BASE_URL = "http://bolt-sidecar"
-
+SERVICE_NAME = "bolt-sidecar"
+BOLT_SIDECAR_BASE_URL = "http://{}".format(SERVICE_NAME)
 BOLT_SIDECAR_COMMITMENTS_API_PORT = 9061
-BOLT_SIDECAR_BOOST_PROXY_PORT = 9062
 BOLT_SIDECAR_METRICS_PORT = 9063
 
 # The min/max CPU/memory that bolt-sidecar can use
@@ -27,7 +27,7 @@ def launch_bolt_sidecar(
     }
 
     api = plan.add_service(
-        name="bolt-sidecar",
+        name=SERVICE_NAME,
         config=ServiceConfig(
             image=image,
             cmd=[
@@ -39,7 +39,7 @@ def launch_bolt_sidecar(
                 "--constraints-url",
                 sidecar_config["constraints_api_url"],
                 "--constraints-proxy-port",
-                str(BOLT_SIDECAR_BOOST_PROXY_PORT),
+                str(bolt_boost.BOLT_BOOST_PORT),
                 "--beacon-api-url",
                 sidecar_config["beacon_api_url"],
                 "--execution-api-url",
@@ -66,8 +66,8 @@ def launch_bolt_sidecar(
                 "api": PortSpec(
                     number=BOLT_SIDECAR_COMMITMENTS_API_PORT, transport_protocol="TCP"
                 ),
-                "mevboost-proxy": PortSpec(
-                    number=BOLT_SIDECAR_BOOST_PROXY_PORT, transport_protocol="TCP"
+                "bolt-boost": PortSpec(
+                    number=bolt_boost.BOLT_BOOST_PORT, transport_protocol="TCP"
                 ),
                 "metrics": PortSpec(
                     number=BOLT_SIDECAR_METRICS_PORT, transport_protocol="TCP"

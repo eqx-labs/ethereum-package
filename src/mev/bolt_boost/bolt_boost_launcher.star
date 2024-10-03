@@ -1,18 +1,18 @@
 shared_utils = import_module("../../shared_utils/shared_utils.star")
 mev_boost_context_module = import_module("../mev_boost/mev_boost_context.star")
-input_parser = import_module("../../package_io/input_parser.star")
 static_files = import_module("../../static_files/static_files.star")
 
 FLASHBOTS_MEV_BOOST_PROTOCOL = "TCP"
 
-SERVICE_NAME="bolt-boost"
+SERVICE_NAME = "bolt-boost"
+BOLT_BOOST_BASE_URL = "http://{0}".format(SERVICE_NAME)
+BOLT_BOOST_PORT = 9062
 BOLT_BOOST_CONFIG_FILENAME="cb-bolt-config.toml"
 BOLT_BOOST_CONFIG_MOUNT_DIRPATH_ON_SERVICE="/config"
-BOLT_BOOST_BUILDER_PROXY_PORT=18551
 
 USED_PORTS = {
     "api": shared_utils.new_port_spec(
-        input_parser.FLASHBOTS_MEV_BOOST_PORT, FLASHBOTS_MEV_BOOST_PROTOCOL, wait="5s"
+        BOLT_BOOST_PORT, "TCP", wait="5s"
     )
 }
 
@@ -26,7 +26,7 @@ MAX_MEMORY = 256
 def launch(
     plan,
     bolt_boost_image,
-    service_name,
+    service_name, # unused as of now
     relays_config,
     bolt_sidecar_config,
     network_params,
@@ -40,10 +40,10 @@ def launch(
         global_node_selectors,
     )
 
-    mev_boost_service = plan.add_service(service_name, config)
+    bolt_boost_service = plan.add_service(SERVICE_NAME, config)
 
     return mev_boost_context_module.new_mev_boost_context(
-        mev_boost_service.ip_address, input_parser.FLASHBOTS_MEV_BOOST_PORT
+        bolt_boost_service.ip_address, bolt_boost_service.ports["api"].number
     )
 
 
@@ -98,7 +98,7 @@ def new_bolt_boost_config_template_data(image, relays_config, bolt_sidecar_confi
     return {
         "chain": "Holesky",
         "image": image,
-        "port": input_parser.FLASHBOTS_MEV_BOOST_PORT,
+        "port": BOLT_BOOST_PORT,
         "relays_config": [
             {
                 "id": relay_config["id"],
@@ -112,6 +112,6 @@ def new_bolt_boost_config_template_data(image, relays_config, bolt_sidecar_confi
             "engine_api_url": bolt_sidecar_config["engine_api_url"],
             "jwt_hex": bolt_sidecar_config["jwt_hex"],
             "metrics_port": bolt_sidecar_config["metrics_port"],
-            "builder_proxy_port": BOLT_BOOST_BUILDER_PROXY_PORT,
+            "builder_proxy_port": BOLT_BOOST_PORT,
         }
     }
