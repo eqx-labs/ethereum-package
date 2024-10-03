@@ -29,8 +29,10 @@ blockscout = import_module("./src/blockscout/blockscout_launcher.star")
 prometheus = import_module("./src/prometheus/prometheus_launcher.star")
 grafana = import_module("./src/grafana/grafana_launcher.star")
 mev_boost = import_module("./src/mev/mev_boost/mev_boost_launcher.star")
+bolt_boost = import_module("./src/mev/bolt-boost/bolt-boost-launcher.star")
 mock_mev = import_module("./src/mev/mock_mev/mock_mev_launcher.star")
 mev_relay = import_module("./src/mev/mev_relay/mev_relay_launcher.star")
+helix_relay = import_module("./src/mev/mev_relay/helix_launcher.star")
 mev_flood = import_module("./src/mev/mev_flood/mev_flood_launcher.star")
 mev_custom_flood = import_module(
     "./src/mev/mev_custom_flood/mev_custom_flood_launcher.star"
@@ -126,10 +128,11 @@ def run(plan, args={}):
         )
     )
 
-    mev_sidecar_context=struct(
-        ip_addr="",
-        metrics_port_num=0,
-    )
+    #mev_sidecar_context=struct(
+    #    ip_addr="",
+    #    metrics_port_num=0,
+    #)
+    mev_sidecar_context = None
     all_el_contexts = []
     all_cl_contexts = []
     all_vc_contexts = []
@@ -212,6 +215,7 @@ def run(plan, args={}):
         beacon_uris = ",".join(
             ["{0}".format(context.beacon_http_url) for context in all_cl_contexts]
         )
+        plan.print(beacon_uris)
 
         first_cl_client = all_cl_contexts[0]
         first_client_beacon_name = first_cl_client.beacon_service_name
@@ -237,15 +241,16 @@ def run(plan, args={}):
             timeout="20m",
             service_name=first_client_beacon_name,
         )
-        endpoint = mev_relay.launch_mev_relay(
+        helix_endpoint = helix_relay.launch_helix_relay(
             plan,
             mev_params,
-            network_params.network_id,
+            network_params,
             beacon_uris,
             genesis_validators_root,
             builder_uri,
             network_params.seconds_per_slot,
             persistent,
+            final_genesis_timestamp,
             global_node_selectors,
         )
         mev_flood.spam_in_background(
@@ -256,7 +261,7 @@ def run(plan, args={}):
             contract_owner.private_key,
             normal_user.private_key,
         )
-        mev_endpoints.append(endpoint)
+        mev_endpoints.append(helix_endpoint)
 
     # spin up the mev boost contexts if some endpoints for relays have been passed
     all_mevboost_contexts = []
@@ -266,47 +271,74 @@ def run(plan, args={}):
                 index + 1, len(str(len(all_participants)))
             )
             if args_with_right_defaults.participants[index].validator_count != 0:
-                mev_boost_launcher = mev_boost.new_mev_boost_launcher(
-                    MEV_BOOST_SHOULD_CHECK_RELAY,
-                    mev_endpoints,
-                )
-                mev_boost_service_name = "{0}-{1}-{2}-{3}".format(
-                    input_parser.MEV_BOOST_SERVICE_NAME_PREFIX,
-                    index_str,
-                    participant.cl_type,
-                    participant.el_type,
-                )
-                mev_boost_context = mev_boost.launch(
-                    plan,
-                    mev_boost_launcher,
-                    mev_boost_service_name,
-                    network_params.network_id,
-                    mev_params.mev_boost_image,
-                    mev_params.mev_boost_args,
-                    global_node_selectors,
-                    network_params,
-                )
-                all_mevboost_contexts.append(mev_boost_context)
+                if mev_params.bolt_boost_image == None:
+                    mev_boost_launcher = mev_boost.new_mev_boost_launcher(
+                        MEV_BOOST_SHOULD_CHECK_RELAY,
+                        mev_endpoints,
+                    )
+                    mev_boost_service_name = "{0}-{1}-{2}-{3}".format(
+                        input_parser.MEV_BOOST_SERVICE_NAME_PREFIX,
+                        index_str,
+                        participant.cl_type,
+                        participant.el_type,
+                    )
+                    mev_boost_context = mev_boost.launch(
+                        plan,
+                        mev_boost_launcher,
+                        mev_boost_service_name,
+                        network_params.network_id,
+                        mev_params.mev_boost_image,
+                        mev_params.mev_boost_args,
+                        global_node_selectors,
+                        network_params,
+                    )
+                    all_mevboost_contexts.append(mev_boost_context)
 
-                # add mev-sidecar
-                mev_sidecar_ctx = mev_sidecar.launch_mev_sidecar(
-                    plan,
-                    mev_params,
-                    global_node_selectors,
-                    mev_boost_context,
-                    all_cl_contexts[0].beacon_http_url,
-                    "http://{0}:{1}".format(
-                        all_el_contexts[0].ip_addr,
-                        all_el_contexts[0].rpc_port_num,
-                    ),
-                    "http://{0}:{1}".format(
-                        all_el_contexts[0].ip_addr,
-                        all_el_contexts[0].engine_rpc_port_num
-                    ),
-                    raw_jwt_secret,
-                    network_params.seconds_per_slot
-                )
-                mev_sidecar_context = mev_sidecar_ctx
+                else:
+                    bolt_boost_service_name = "{0}-{1}-{2}-{3}".format(
+                        input_parser.BOLT_BOOST_SERVICE_NAME_PREFIX,
+                        index_str,
+                        participant.cl_type,
+                        participant.el_type,
+                    )
+                    relays_config = [{
+                        "id": "helix_relay",
+                        "url": helix_endpoint,
+                    }]
+                    bolt_sidecar_config = {
+                        "constraints_api_url": "{0}:{1}".format(
+                            mev_sidecar.MEV_SIDECAR_ENDPOINT, mev_sidecar.MEV_SIDECAR_ENDPOINT_PORT
+                        ),
+                        "beacon_api_url": all_cl_contexts[0].beacon_http_url,
+                        "execution_api_url": "http://{0}:{1}".format(
+                            all_el_contexts[0].ip_addr,
+                            all_el_contexts[0].rpc_port_num,
+                        ),
+                        "engine_api_url": "http://{0}:{1}".format(
+                            all_el_contexts[0].ip_addr,
+                            all_el_contexts[0].engine_rpc_port_num
+                        ),
+                        "jwt_hex": raw_jwt_secret,
+                        "metrics_port": mev_sidecar.MEV_SIDECAR_METRICS_PORT,
+                    }
+                    bolt_boost_context = bolt_boost.launch(
+                        plan,
+                        mev_params.bolt_boost_image,
+                        bolt_boost_service_name,
+                        relays_config,
+                        bolt_sidecar_config,
+                        network_params,
+                        global_node_selectors,
+                    )
+                    all_mevboost_contexts.append(bolt_boost_context)
+                    # add mev-sidecar
+                    mev_sidecar_context = mev_sidecar.launch_mev_sidecar(
+                        plan,
+                        mev_params.mev_sidecar_image,
+                        bolt_sidecar_config,
+                        network_params,
+                        global_node_selectors,
+                    )
 
     if len(args_with_right_defaults.additional_services) == 0:
         output = struct(

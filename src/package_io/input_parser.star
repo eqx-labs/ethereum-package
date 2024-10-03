@@ -44,6 +44,7 @@ HIGH_DENEB_VALUE_FORK_VERKLE = 2000000000
 # MEV Params
 FLASHBOTS_MEV_BOOST_PORT = 18550
 MEV_BOOST_SERVICE_NAME_PREFIX = "mev-boost"
+BOLT_BOOST_SERVICE_NAME_PREFIX = "bolt-boost"
 
 # Minimum number of validators required for a network to be valid is 64
 MIN_VALIDATORS = 64
@@ -237,6 +238,8 @@ def input_parser(plan, input_args):
             preset=result["network_params"]["preset"],
         ),
         mev_params=struct(
+            bolt_boost_image=result["mev_params"]["bolt_boost_image"],
+            helix_relay_image=result["mev_params"]["helix_relay_image"],
             mev_relay_image=result["mev_params"]["mev_relay_image"],
             mev_builder_image=result["mev_params"]["mev_builder_image"],
             mev_builder_cl_image=result["mev_params"]["mev_builder_cl_image"],
@@ -710,6 +713,7 @@ def default_participant():
 
 def get_default_mev_params():
     return {
+        "bolt_boost_image": None,
         "mev_relay_image": MEV_BOOST_RELAY_DEFAULT_IMAGE,
         "mev_builder_image": "flashbots/builder:latest",
         "mev_builder_cl_image": "sigp/lighthouse:latest",
@@ -855,7 +859,8 @@ def enrich_mev_extra_params(parsed_arguments_dict, mev_prefix, mev_port, mev_typ
                 # TODO(maybe) make parts of this more passable like the mev-relay-endpoint & forks
                 "el_extra_params": [
                     "--builder",
-                    "--builder.remote_relay_endpoint=http://mev-relay-api:9062",
+                    # TODO: (thedevbirb) this should indeed more passable. Now hardcoded for Helix relay
+                    "--builder.remote_relay_endpoint=http://helix-relay:4040",
                     "--builder.beacon_endpoints=http://cl-{0}-lighthouse-geth-builder:4000".format(
                         index_str
                     ),
