@@ -29,7 +29,7 @@ blockscout = import_module("./src/blockscout/blockscout_launcher.star")
 prometheus = import_module("./src/prometheus/prometheus_launcher.star")
 grafana = import_module("./src/grafana/grafana_launcher.star")
 mev_boost = import_module("./src/mev/mev_boost/mev_boost_launcher.star")
-bolt_boost = import_module("./src/mev/bolt-boost/bolt-boost-launcher.star")
+bolt_boost = import_module("./src/mev/bolt_boost/bolt_boost_launcher.star")
 mock_mev = import_module("./src/mev/mock_mev/mock_mev_launcher.star")
 mev_relay = import_module("./src/mev/mev_relay/mev_relay_launcher.star")
 helix_relay = import_module("./src/mev/mev_relay/helix_launcher.star")
@@ -39,7 +39,7 @@ mev_custom_flood = import_module(
 )
 broadcaster = import_module("./src/broadcaster/broadcaster.star")
 assertoor = import_module("./src/assertoor/assertoor_launcher.star")
-mev_sidecar = import_module("./src/mev/mev_sidecar/mev_sidecar_launcher.star")
+bolt_sidecar = import_module("./src/mev/bolt_sidecar/bolt_sidecar_launcher.star")
 
 GRAFANA_USER = "admin"
 GRAFANA_PASSWORD = "admin"
@@ -128,11 +128,11 @@ def run(plan, args={}):
         )
     )
 
-    #mev_sidecar_context=struct(
+    #bolt_sidecar_context=struct(
     #    ip_addr="",
     #    metrics_port_num=0,
     #)
-    mev_sidecar_context = None
+    bolt_sidecar_context = None
     all_el_contexts = []
     all_cl_contexts = []
     all_vc_contexts = []
@@ -307,7 +307,7 @@ def run(plan, args={}):
                     }]
                     bolt_sidecar_config = {
                         "constraints_api_url": "{0}:{1}".format(
-                            mev_sidecar.MEV_SIDECAR_ENDPOINT, mev_sidecar.MEV_SIDECAR_ENDPOINT_PORT
+                            bolt_sidecar.BOLT_SIDECAR_BASE_URL, bolt_sidecar.BOLT_SIDECAR_COMMITMENTS_API_PORT
                         ),
                         "beacon_api_url": all_cl_contexts[0].beacon_http_url,
                         "execution_api_url": "http://{0}:{1}".format(
@@ -319,7 +319,7 @@ def run(plan, args={}):
                             all_el_contexts[0].engine_rpc_port_num
                         ),
                         "jwt_hex": raw_jwt_secret,
-                        "metrics_port": mev_sidecar.MEV_SIDECAR_METRICS_PORT,
+                        "metrics_port": bolt_sidecar.BOLT_SIDECAR_METRICS_PORT,
                     }
                     bolt_boost_context = bolt_boost.launch(
                         plan,
@@ -331,10 +331,10 @@ def run(plan, args={}):
                         global_node_selectors,
                     )
                     all_mevboost_contexts.append(bolt_boost_context)
-                    # add mev-sidecar
-                    mev_sidecar_context = mev_sidecar.launch_mev_sidecar(
+                    # add bolt-sidecar
+                    bolt_sidecar_context = bolt_sidecar.launch_bolt_sidecar(
                         plan,
-                        mev_params.mev_sidecar_image,
+                        mev_params.bolt_sidecar_image,
                         bolt_sidecar_config,
                         network_params,
                         global_node_selectors,
@@ -508,7 +508,7 @@ def run(plan, args={}):
             all_ethereum_metrics_exporter_contexts,
             all_xatu_sentry_contexts,
             global_node_selectors,
-            mev_sidecar_context,
+            bolt_sidecar_context,
         )
 
         plan.print("Launching grafana...")
