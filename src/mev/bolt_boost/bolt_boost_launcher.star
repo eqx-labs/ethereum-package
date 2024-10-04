@@ -1,6 +1,7 @@
 shared_utils = import_module("../../shared_utils/shared_utils.star")
 mev_boost_context_module = import_module("../mev_boost/mev_boost_context.star")
 static_files = import_module("../../static_files/static_files.star")
+constants = import_module("../../package_io/constants.star")
 
 FLASHBOTS_MEV_BOOST_PROTOCOL = "TCP"
 
@@ -30,13 +31,17 @@ def launch(
     relays_config,
     bolt_sidecar_config,
     network_params,
+    final_genesis_timestamp,
     global_node_selectors,
 ):
+    plan.print(network_params)
     config = get_bolt_boost_config(
         plan,
         bolt_boost_image,
         relays_config,
         bolt_sidecar_config,
+        network_params,
+        final_genesis_timestamp,
         global_node_selectors,
     )
 
@@ -52,6 +57,8 @@ def get_bolt_boost_config(
     image,
     relays_config,
     bolt_sidecar_config,
+    network_params,
+    final_genesis_timestamp,
     node_selectors,
 ):
     # Read the template file for Bolt Boost configuration
@@ -61,7 +68,13 @@ def get_bolt_boost_config(
 
     # Generate the data to be used in the Bolt Boost configuration,
     # wrap them together in a struct
-    bolt_boost_config_template_data = new_bolt_boost_config_template_data(image, relays_config, bolt_sidecar_config)
+    bolt_boost_config_template_data = new_bolt_boost_config_template_data(
+        image,
+        relays_config,
+        bolt_sidecar_config,
+        network_params,
+        final_genesis_timestamp,
+    )
     bolt_boost_config_template_and_data = shared_utils.new_template_and_data(
         bolt_boost_config_template, bolt_boost_config_template_data
     )
@@ -95,9 +108,20 @@ def get_bolt_boost_config(
         node_selectors=node_selectors,
     )
 
-def new_bolt_boost_config_template_data(image, relays_config, bolt_sidecar_config):
+def new_bolt_boost_config_template_data(
+    image,
+    relays_config,
+    bolt_sidecar_config,
+    network_params,
+    final_genesis_timestamp,
+):
     return {
-        "chain": "Holesky",
+        "chain_config": {
+            "name": network_params.network.capitalize(),
+            "genesis_timestamp": final_genesis_timestamp,
+            "seconds_per_slot": network_params.seconds_per_slot,
+            "genesis_fork_version": constants.GENESIS_FORK_VERSION,
+        },
         "image": image,
         "port": BOLT_BOOST_PORT,
         "relays_config": [

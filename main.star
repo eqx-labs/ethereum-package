@@ -328,6 +328,7 @@ def run(plan, args={}):
                         relays_config,
                         bolt_sidecar_config,
                         network_params,
+                        final_genesis_timestamp,
                         global_node_selectors,
                     )
                     all_mevboost_contexts.append(bolt_boost_context)
