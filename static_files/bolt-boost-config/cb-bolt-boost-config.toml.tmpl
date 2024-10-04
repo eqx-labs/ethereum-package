@@ -1,8 +1,15 @@
 # The main configuration file for the Commit-Boost sidecar.
 # Some fields are optional and can be omitted, in which case the default value, if present, will be used.
 
-# Chain spec id. Supported values: Mainnet, Holesky, Helder
-chain = "{{ or .chain "Mainnet" }}"
+# Chain spec id. Supported values: Mainnet, Holesky, Helder, Custom
+{{- if eq .chain_config.name "Kurtosis" }}
+[chain]
+genesis_time_secs = {{ .chain_config.genesis_timestamp }}
+slot_time_secs = {{ .chain_config.seconds_per_slot }}
+genesis_fork_version = "{{ .chain_config.genesis_fork_version }}"
+{{- else }}
+chain = "{{ .chain_config.name }}"
+{{- end }}
 
 # Configuration for the PBS module
 [pbs]
