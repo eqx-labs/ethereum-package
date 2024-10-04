@@ -82,6 +82,7 @@ def get_bolt_boost_config(
             BOLT_BOOST_CONFIG_MOUNT_DIRPATH_ON_SERVICE: config_files_artifact_name
         },
         env_vars={
+            "RUST_LOG": "debug",
             "CB_CONFIG": shared_utils.path_join(
                 BOLT_BOOST_CONFIG_MOUNT_DIRPATH_ON_SERVICE,
                 BOLT_BOOST_CONFIG_FILENAME,
