@@ -293,25 +293,29 @@ def run(plan, args={}):
                 )
                 all_mevboost_contexts.append(mev_boost_context)
 
-                # add mev-sidecar
-                mev_sidecar_ctx = mev_sidecar.launch_mev_sidecar(
-                    plan,
-                    mev_params,
-                    global_node_selectors,
-                    mev_boost_context,
-                    all_cl_contexts[0].beacon_http_url,
-                    "http://{0}:{1}".format(
-                        all_el_contexts[0].ip_addr,
-                        all_el_contexts[0].rpc_port_num,
-                    ),
-                    "http://{0}:{1}".format(
-                        all_el_contexts[0].ip_addr,
-                        all_el_contexts[0].engine_rpc_port_num
-                    ),
-                    raw_jwt_secret,
-                    network_params.seconds_per_slot
+                mev_sidecar_context=struct(
+                    ip_addr="mev-sidecar-api",
+                    metrics_port_num=9061,
                 )
-                mev_sidecar_context = mev_sidecar_ctx
+                # add mev-sidecar
+                # mev_sidecar_ctx = mev_sidecar.launch_mev_sidecar(
+                #     plan,
+                #     mev_params,
+                #     global_node_selectors,
+                #     mev_boost_context,
+                #     all_cl_contexts[0].beacon_http_url,
+                #     "http://{0}:{1}".format(
+                #         all_el_contexts[0].ip_addr,
+                #         all_el_contexts[0].rpc_port_num,
+                #     ),
+                #     "http://{0}:{1}".format(
+                #         all_el_contexts[0].ip_addr,
+                #         all_el_contexts[0].engine_rpc_port_num
+                #     ),
+                #     raw_jwt_secret,
+                #     network_params.seconds_per_slot
+                # )
+                # mev_sidecar_context = mev_sidecar_ctx
 
     if len(args_with_right_defaults.additional_services) == 0:
         output = struct(
