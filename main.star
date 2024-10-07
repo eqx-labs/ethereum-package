@@ -333,8 +333,8 @@ def run(plan, args={}):
                             )
                         bolt_boost_context = bolt_boost.launch(
                             plan,
-                            mev_params.bolt_boost_image,
                             bolt_boost_service_name,
+                            mev_params.bolt_boost_image,
                             relays_config,
                             bolt_sidecar_config,
                             network_params,

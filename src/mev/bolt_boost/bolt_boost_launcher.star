@@ -4,7 +4,6 @@ static_files = import_module("../../static_files/static_files.star")
 constants = import_module("../../package_io/constants.star")
 input_parser = import_module("../../package_io/input_parser.star")
 
-SERVICE_NAME = "bolt-boost"
 BOLT_BOOST_CONFIG_FILENAME="cb-bolt-config.toml"
 BOLT_BOOST_CONFIG_MOUNT_DIRPATH_ON_SERVICE="/config"
 
@@ -23,8 +22,8 @@ MAX_MEMORY = 256
 
 def launch(
     plan,
+    service_name,
     bolt_boost_image,
-    service_name, # unused as of now
     relays_config,
     bolt_sidecar_config,
     network_params,
@@ -42,7 +41,7 @@ def launch(
         global_node_selectors,
     )
 
-    bolt_boost_service = plan.add_service(SERVICE_NAME, config)
+    bolt_boost_service = plan.add_service(service_name, config)
 
     return mev_boost_context_module.new_mev_boost_context(
         bolt_boost_service.ip_address, bolt_boost_service.ports["api"].number
