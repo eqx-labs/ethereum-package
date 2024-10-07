@@ -271,6 +271,24 @@ def run(plan, args={}):
                     index + 1, len(str(len(all_participants)))
                 )
                 if args_with_right_defaults.participants[index].validator_count != 0:
+                    # Initialize the Bolt Sidecar configure if needed
+                    bolt_sidecar_config = None
+                    if mev_params.bolt_sidecar_image != None:
+                        # NOTE: this is a stub missing the `"constraints_api_url"` entry
+                        bolt_sidecar_config = {
+                            "beacon_api_url": participant.cl_context.beacon_http_url,
+                            "execution_api_url": "http://{0}:{1}".format(
+                                participant.el_context.ip_addr,
+                                participant.el_context.rpc_port_num,
+                            ),
+                            "engine_api_url": "http://{0}:{1}".format(
+                                participant.el_context.ip_addr,
+                                participant.el_context.engine_rpc_port_num
+                            ),
+                            "jwt_hex": raw_jwt_secret,
+                            "metrics_port": bolt_sidecar.BOLT_SIDECAR_METRICS_PORT,
+                        }
+
                     if mev_params.bolt_boost_image == None:
                         mev_boost_launcher = mev_boost.new_mev_boost_launcher(
                             MEV_BOOST_SHOULD_CHECK_RELAY,
@@ -292,6 +310,10 @@ def run(plan, args={}):
                             global_node_selectors,
                             network_params,
                         )
+                        if bolt_sidecar_config != None:
+                            bolt_sidecar_config["constraints_api_url"] = "http://{0}:{1}".format(
+                                mev_boost_context.private_ip_address, mev_boost_context.port
+                            )
                         all_mevboost_contexts.append(mev_boost_context)
 
                     else:
@@ -305,22 +327,10 @@ def run(plan, args={}):
                             "id": "helix_relay",
                             "url": helix_endpoint,
                         }]
-                        bolt_sidecar_config = {
-                            "constraints_api_url": "{0}:{1}".format(
-                                bolt_boost.BOLT_BOOST_BASE_URL, bolt_boost.BOLT_BOOST_PORT
-                            ),
-                            "beacon_api_url": all_cl_contexts[0].beacon_http_url,
-                            "execution_api_url": "http://{0}:{1}".format(
-                                all_el_contexts[0].ip_addr,
-                                all_el_contexts[0].rpc_port_num,
-                            ),
-                            "engine_api_url": "http://{0}:{1}".format(
-                                all_el_contexts[0].ip_addr,
-                                all_el_contexts[0].engine_rpc_port_num
-                            ),
-                            "jwt_hex": raw_jwt_secret,
-                            "metrics_port": bolt_sidecar.BOLT_SIDECAR_METRICS_PORT,
-                        }
+                        if bolt_sidecar_config != None:
+                            bolt_sidecar_config["constraints_api_url"] = "http://{0}:{1}".format(
+                                bolt_boost_service_name, input_parser.FLASHBOTS_MEV_BOOST_PORT
+                            )
                         bolt_boost_context = bolt_boost.launch(
                             plan,
                             mev_params.bolt_boost_image,
@@ -332,7 +342,15 @@ def run(plan, args={}):
                             global_node_selectors,
                         )
                         all_mevboost_contexts.append(bolt_boost_context)
-                        # add bolt-sidecar
+
+                    if bolt_sidecar_config != None:
+                        service_name = "{0}-{1}-{2}-{3}".format(
+                            input_parser.BOLT_SIDECAR_SERVICE_NAME_PREFIX,
+                            index_str,
+                            participant.cl_type,
+                            participant.el_type,
+                        )
+                        bolt_sidecar_config["service_name"] = service_name
                         bolt_sidecar_context = bolt_sidecar.launch_bolt_sidecar(
                             plan,
                             mev_params.bolt_sidecar_image,

@@ -3,8 +3,6 @@ shared_utils = import_module("../shared_utils/shared_utils.star")
 genesis_constants = import_module(
     "../prelaunch_data_generator/genesis_constants/genesis_constants.star"
 )
-bolt_sidecar = import_module("../mev/bolt_sidecar/bolt_sidecar_launcher.star")
-bolt_boost = import_module("../mev/bolt_boost/bolt_boost_launcher.star")
 
 DEFAULT_EL_IMAGES = {
     "geth": "ethereum/client-go:latest",
@@ -46,6 +44,7 @@ HIGH_DENEB_VALUE_FORK_VERKLE = 2000000000
 FLASHBOTS_MEV_BOOST_PORT = 18550
 MEV_BOOST_SERVICE_NAME_PREFIX = "mev-boost"
 BOLT_BOOST_SERVICE_NAME_PREFIX = "bolt-boost"
+BOLT_SIDECAR_SERVICE_NAME_PREFIX = "bolt-sidecar"
 
 # Minimum number of validators required for a network to be valid is 64
 MIN_VALIDATORS = 64
@@ -143,12 +142,20 @@ def input_parser(plan, input_args):
         result = enrich_disable_peer_scoring(result)
 
     if result.get("mev_type") in ("mock", "full"):
-        result = enrich_mev_extra_params(
-            result,
-            MEV_BOOST_SERVICE_NAME_PREFIX,
-            bolt_boost.BOLT_BOOST_PORT,
-            result.get("mev_type"),
-        )
+        if result.get("mev_params")["bolt_boost_image"] != None:
+            result = enrich_mev_extra_params(
+                result,
+                MEV_BOOST_SERVICE_NAME_PREFIX,
+                FLASHBOTS_MEV_BOOST_PORT,
+                result.get("mev_type"),
+            )
+        else:
+            result = enrich_mev_extra_params(
+                result,
+                BOLT_BOOST_SERVICE_NAME_PREFIX,
+                FLASHBOTS_MEV_BOOST_PORT,
+                result.get("mev_type"),
+            )
 
     return struct(
         participants=[
@@ -801,16 +808,13 @@ def enrich_mev_extra_params(parsed_arguments_dict, mev_prefix, mev_port, mev_typ
             index + 1, len(str(len(parsed_arguments_dict["participants"])))
         )
 
-        # mev_url = "http://{0}-{1}-{2}-{3}:{4}".format(
-        #     MEV_BOOST_SERVICE_NAME_PREFIX,
-        #     index_str,
-        #     participant["cl_type"],
-        #     participant["el_type"],
-        #     mev_port,
-        # )
-
-        # connection: beacon node -> mev-boost
-        mev_url = "{0}:{1}".format(bolt_sidecar.BOLT_SIDECAR_BASE_URL, mev_port)
+        mev_url = "http://{0}-{1}-{2}-{3}:{4}".format(
+            MEV_BOOST_SERVICE_NAME_PREFIX,
+            index_str,
+            participant["cl_type"],
+            participant["el_type"],
+            mev_port,
+        )
 
         if participant["cl_type"] == "lighthouse":
             participant["vc_extra_params"].append("--builder-proposals")
