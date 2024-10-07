@@ -1,11 +1,8 @@
 redis_module = import_module("github.com/kurtosis-tech/redis-package/main.star")
 postgres_module = import_module("github.com/kurtosis-tech/postgres-package/main.star")
 constants = import_module("../../package_io/constants.star")
-bolt_boost = import_module("../bolt_boost/bolt_boost_launcher.star")
-mev_boost_context_util = import_module("../mev_boost/mev_boost_context.star")
+input_parser = import_module("../../package_io/input_parser.star")
 
-SERVICE_NAME = "bolt-sidecar"
-BOLT_SIDECAR_BASE_URL = "http://{}".format(SERVICE_NAME)
 BOLT_SIDECAR_COMMITMENTS_API_PORT = 9061
 BOLT_SIDECAR_METRICS_PORT = 9063
 
@@ -27,7 +24,7 @@ def launch_bolt_sidecar(
     }
 
     api = plan.add_service(
-        name=SERVICE_NAME,
+        name=sidecar_config["service_name"],
         config=ServiceConfig(
             image=image,
             cmd=[
@@ -39,7 +36,7 @@ def launch_bolt_sidecar(
                 "--constraints-url",
                 sidecar_config["constraints_api_url"],
                 "--constraints-proxy-port",
-                str(bolt_boost.BOLT_BOOST_PORT),
+                str(input_parser.FLASHBOTS_MEV_BOOST_PORT),
                 "--beacon-api-url",
                 sidecar_config["beacon_api_url"],
                 "--execution-api-url",
@@ -67,7 +64,7 @@ def launch_bolt_sidecar(
                     number=BOLT_SIDECAR_COMMITMENTS_API_PORT, transport_protocol="TCP"
                 ),
                 "bolt-boost": PortSpec(
-                    number=bolt_boost.BOLT_BOOST_PORT, transport_protocol="TCP"
+                    number=input_parser.FLASHBOTS_MEV_BOOST_PORT, transport_protocol="TCP"
                 ),
                 "metrics": PortSpec(
                     number=BOLT_SIDECAR_METRICS_PORT, transport_protocol="TCP"
