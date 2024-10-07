@@ -145,14 +145,14 @@ def input_parser(plan, input_args):
         if result.get("mev_params")["bolt_boost_image"] != None:
             result = enrich_mev_extra_params(
                 result,
-                MEV_BOOST_SERVICE_NAME_PREFIX,
+                BOLT_BOOST_SERVICE_NAME_PREFIX,
                 FLASHBOTS_MEV_BOOST_PORT,
                 result.get("mev_type"),
             )
         else:
             result = enrich_mev_extra_params(
                 result,
-                BOLT_BOOST_SERVICE_NAME_PREFIX,
+                MEV_BOOST_SERVICE_NAME_PREFIX,
                 FLASHBOTS_MEV_BOOST_PORT,
                 result.get("mev_type"),
             )
@@ -809,7 +809,7 @@ def enrich_mev_extra_params(parsed_arguments_dict, mev_prefix, mev_port, mev_typ
         )
 
         mev_url = "http://{0}-{1}-{2}-{3}:{4}".format(
-            MEV_BOOST_SERVICE_NAME_PREFIX,
+            mev_prefix,
             index_str,
             participant["cl_type"],
             participant["el_type"],
