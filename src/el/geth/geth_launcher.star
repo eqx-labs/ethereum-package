@@ -269,7 +269,7 @@ def get_config(
         "--ws.api=admin,engine,net,eth,web3,debug",
         "--ws.origins=*",
         "--allow-insecure-unlock",
-        "--nat=extip:" + 162.55.190.235,
+        "--nat=extip:162.55.190.235",
         "--verbosity=" + verbosity_level,
         "--authrpc.port={0}".format(ENGINE_RPC_PORT_NUM),
         "--authrpc.addr=0.0.0.0",
