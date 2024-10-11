@@ -287,6 +287,8 @@ def run(plan, args={}):
                             ),
                             "jwt_hex": raw_jwt_secret,
                             "metrics_port": bolt_sidecar.BOLT_SIDECAR_METRICS_PORT,
+                            "validator_keystore_files_artifact_uuid": participant.cl_context.validator_keystore_files_artifact_uuid,
+                            "participant_index": index,
                         }
 
                     if mev_params.bolt_boost_image == None:
