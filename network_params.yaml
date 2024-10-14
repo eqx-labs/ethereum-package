@@ -43,3 +43,6 @@ mev_params:
   mev_flood_seconds_per_bundle: 15
   custom_flood_params:
     interval_between_transactions: 1
+
+dora_params:
+  image: "ishx1/dora:tagname"
