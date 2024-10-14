@@ -88,7 +88,7 @@ network_params:
   prefunded_accounts: {}
 additional_services: [ tx_spammer, prometheus_grafana, dora ]
 dora_params:
-  image: ""
+  image: "ishx1/dora:tagname"
 tx_spammer_params:
   tx_spammer_extra_args: []
 goomy_blob_params:
