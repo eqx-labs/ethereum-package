@@ -1,12 +1,116 @@
+participants:
+# EL
+  - el_type: geth
+    el_image: ethereum/client-go:latest
+    el_log_level: ""
+    el_extra_env_vars: {}
+    el_extra_labels: {}
+    el_extra_params: []
+    el_tolerations: []
+    el_volume_size: 0
+    el_min_cpu: 0
+    el_max_cpu: 0
+    el_min_mem: 0
+    el_max_mem: 0
+# CL
+    cl_type: lighthouse
+    cl_image: sigp/lighthouse:latest-unstable
+    cl_log_level: ""
+    cl_extra_env_vars: {}
+    cl_extra_labels: {}
+    cl_extra_params: []
+    cl_tolerations: []
+    cl_volume_size: 0
+    cl_min_cpu: 0
+    cl_max_cpu: 0
+    cl_min_mem: 0
+    cl_max_mem: 0
+    supernode: false
+    use_separate_vc: true
+# Validator
+    vc_type: lighthouse
+    vc_image: sigp/lighthouse:latest-unstable
+    vc_log_level: ""
+    vc_count: 4
+    vc_extra_env_vars: {}
+    vc_extra_labels: {}
+    vc_extra_params: []
+    vc_tolerations: []
+    vc_min_cpu: 0
+    vc_max_cpu: 0
+    vc_min_mem: 0
+    vc_max_mem: 0
+    validator_count: 1400
+    use_remote_signer: false
+# Remote signer
+    remote_signer_type: web3signer
+    remote_signer_image: consensys/web3signer:latest
+    remote_signer_extra_env_vars: {}
+    remote_signer_extra_labels: {}
+    remote_signer_extra_params: []
+    remote_signer_tolerations: []
+    remote_signer_min_cpu: 0
+    remote_signer_max_cpu: 0
+    remote_signer_min_mem: 0
+    remote_signer_max_mem: 0
+# participant specific
+    node_selectors: {}
+    tolerations: []
+    count: 2
+    snooper_enabled: false
+    ethereum_metrics_exporter_enabled: false
+    xatu_sentry_enabled: false
+    prometheus_config:
+      scrape_interval: 15s
+      labels: {}
+    blobber_enabled: false
+    blobber_extra_params: []
+    builder_network_params: null
+    keymanager_enabled: false
+
 network_params:
-  seconds_per_slot: 2 # 2 seconds are the minimum for testing
+
+  network: kurtosis
+  network_id: "3151908"
+  deposit_contract_address: "0x4242424242424242424242424242424242424242"
+  num_validator_keys_per_node: 64
+  seconds_per_slot: 12 # 2 seconds are the minimum for testing
+  preregistered_validator_keys_mnemonic:
+    "giant issue aisle success illegal bike spike
+    question tent bar rely arctic volcano long crawl hungry vocal artwork sniff fantasy
+    very lucky have athlete"
+  preregistered_validator_count: 0
+  genesis_delay: 20
+  genesis_gaslimit: 30000000
+  max_per_epoch_activation_churn_limit: 8
+  churn_limit_quotient: 65536
+  ejection_balance: 16000000000
+  eth1_follow_distance: 2048
+  min_validator_withdrawability_delay: 256
+  shard_committee_period: 256
+  deneb_fork_epoch: 0
+  electra_fork_epoch: 100000000
+  fulu_fork_epoch: 100000001
+  eip7594_fork_epoch: 100000002
+  eip7594_fork_version: "0x60000038"
+  network_sync_base_url: https://snapshots.ethpandaops.io/
+  data_column_sidecar_subnet_count: 128
+  samples_per_slot: 8
+  custody_requirement: 4
+  max_blobs_per_block: 6
+  additional_preloaded_contracts: {}
+  devnet_repo: ethpandaops
+  prefunded_accounts: {}
+
 tx_spammer_params:
-  tx_spammer_extra_args: ["--slot-time=1", "--accounts=10", "--txcount=1"]
+  tx_spammer_extra_args: []
+# tx_spammer_params:
+#   tx_spammer_extra_args: ["--slot-time=1", "--accounts=10", "--txcount=1"]
 
 additional_services:
   - broadcaster
   - tx_spammer
-  - blockscout
+  # - blockscout
   - dora
   # - assertoor
   # - blob_spammer
