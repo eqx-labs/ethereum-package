@@ -36,7 +36,7 @@ tx_spammer_params:
 additional_services:
   - broadcaster
   - tx_spammer
-  # - blockscout
+  - blockscout
   - dora
   # - assertoor
   # - blob_spammer
