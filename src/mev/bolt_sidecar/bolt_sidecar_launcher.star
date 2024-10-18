@@ -27,6 +27,7 @@ def launch_bolt_sidecar(
 
     node_keystore_path = validator_keystore_generator.NODE_KEYSTORES_OUTPUT_DIRPATH_FORMAT_STR.format(sidecar_config["participant_index"])
     full_keystore_path = "{0}{1}/keys".format(BOLT_SIDECAR_KEYS_DIRMOUNT_PATH_ON_SERVICE, node_keystore_path)
+    full_keystore_secrets_path = "{0}{1}/secrets".format(BOLT_SIDECAR_KEYS_DIRMOUNT_PATH_ON_SERVICE, node_keystore_path)
 
     api = plan.add_service(
         name=sidecar_config["service_name"],
@@ -37,9 +38,11 @@ def launch_bolt_sidecar(
                 str(BOLT_SIDECAR_COMMITMENTS_API_PORT),
                 # "--private-key",
                 # Random private key for testing, generated with `openssl rand -hex 32`
-                # "18d1c5302e734fd6fbfaa51828d42c4c6d3cbe020c42bab7dd15a2799cf00b82",
-                "--keystore-password",
-                validator_keystore_generator.PRYSM_PASSWORD,
+               # "18d1c5302e734fd6fbfaa51828d42c4c6d3cbe020c42bab7dd15a2799cf00b82",
+                # "--keystore-password",
+                # validator_keystore_generator.PRYSM_PASSWORD,
+                "--keystore-secrets-path",
+                full_keystore_secrets_path,
                 "--keystore-path",
                 full_keystore_path,
                 "--constraints-url",
