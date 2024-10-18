@@ -56,6 +56,9 @@ def launch_bolt_sidecar(
                 "0x0000000000000000000000000000000000000000",
                 "--jwt-hex",
                 sidecar_config["jwt_hex"],
+                "--builder_private_key",
+                # Random private key for testing
+                "0x240872ca0812e33503482a886e05dfe30ae9cf757bf5c040e70eac685e419c6e"
                 "--commitment-deadline",
                 str(100),
                 "--chain",
