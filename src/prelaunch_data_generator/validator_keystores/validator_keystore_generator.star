@@ -10,8 +10,8 @@ PRYSM_PASSWORD_FILEPATH_ON_GENERATOR = "/tmp/prysm-password.txt"
 
 KEYSTORES_GENERATION_TOOL_NAME = "/app/eth2-val-tools"
 
-# ETH_VAL_TOOLS_IMAGE = "protolambda/eth2-val-tools:latest"
-ETH_VAL_TOOLS_IMAGE = "ghcr.io/chainbound/eth2-val-tools:0.1.0"
+ETH_VAL_TOOLS_IMAGE = "protolambda/eth2-val-tools:latest"
+# ETH_VAL_TOOLS_IMAGE = "ghcr.io/chainbound/eth2-val-tools:0.1.0"
 
 SUCCESSFUL_EXEC_CMD_EXIT_CODE = 0
 
