@@ -295,7 +295,7 @@ def run(plan, args={}):
 
                 mev_sidecar_context=struct(
                     ip_addr="mev-sidecar-api",
-                    metrics_port_num=9061,
+                    metrics_port_num=8000,
                 )
                 # add mev-sidecar
                 # mev_sidecar_ctx = mev_sidecar.launch_mev_sidecar(
