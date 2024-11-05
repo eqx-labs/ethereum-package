@@ -45,7 +45,7 @@ def launch_bolt_sidecar(
                 "--constraints-api-url",
                 sidecar_config["constraints_api_url"],
                 "--constraints-proxy-port",
-                str(input_parser.FLASHBOTS_MEV_BOOST_PORT),
+                str(input_parser.BOLT_SIDECAR_CONSTRAINTS_PROXY_PORT),
                 "--validator-indexes",
                 "0..64",
                 "--engine-jwt-hex",
@@ -76,8 +76,8 @@ def launch_bolt_sidecar(
                 "api": PortSpec(
                     number=BOLT_SIDECAR_COMMITMENTS_API_PORT, transport_protocol="TCP"
                 ),
-                "bolt-boost": PortSpec(
-                    number=input_parser.FLASHBOTS_MEV_BOOST_PORT, transport_protocol="TCP"
+                "bolt-sidecar": PortSpec(
+                    number=input_parser.BOLT_SIDECAR_CONSTRAINTS_PROXY_PORT, transport_protocol="TCP"
                 ),
                 "metrics": PortSpec(
                     number=BOLT_SIDECAR_METRICS_PORT, transport_protocol="TCP"
