@@ -131,7 +131,7 @@ def launch_helix_relay(
 
     env_vars = {
         "RELAY_KEY": DUMMY_SECRET_KEY,
-        "RUST_LOG": "RUST_LOG=helix_cmd=trace,helix_api=trace,helix_common=trace,helix_datastore=trace,helix_housekeeper=trace,helix_database=trace,helix_beacon_client=trace",
+        "RUST_LOG": "helix_cmd=trace,helix_api=trace,helix_common=trace,helix_datastore=trace,helix_housekeeper=trace,helix_database=trace,helix_beacon_client=trace",
     }
 
     helix = plan.add_service(
