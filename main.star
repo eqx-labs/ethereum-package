@@ -309,8 +309,9 @@ def run(plan, args={}):
                             network_params.network_id,
                             mev_params.mev_boost_image,
                             mev_params.mev_boost_args,
-                            global_node_selectors,
                             network_params,
+                            final_genesis_timestamp,
+                            global_node_selectors,
                         )
                         if bolt_sidecar_config != None:
                             bolt_sidecar_config["constraints_api_url"] = "http://{0}:{1}".format(
