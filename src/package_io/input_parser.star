@@ -42,6 +42,7 @@ HIGH_DENEB_VALUE_FORK_VERKLE = 2000000000
 
 # MEV Params
 FLASHBOTS_MEV_BOOST_PORT = 18550
+BOLT_SIDECAR_CONSTRAINTS_PROXY_PORT = 18551
 MEV_BOOST_SERVICE_NAME_PREFIX = "mev-boost"
 BOLT_BOOST_SERVICE_NAME_PREFIX = "bolt-boost"
 BOLT_SIDECAR_SERVICE_NAME_PREFIX = "bolt-sidecar"
@@ -152,8 +153,8 @@ def input_parser(plan, input_args):
         else:
             result = enrich_mev_extra_params(
                 result,
-                MEV_BOOST_SERVICE_NAME_PREFIX,
-                FLASHBOTS_MEV_BOOST_PORT,
+                BOLT_SIDECAR_SERVICE_NAME_PREFIX,
+                BOLT_SIDECAR_CONSTRAINTS_PROXY_PORT,
                 result.get("mev_type"),
             )
 
