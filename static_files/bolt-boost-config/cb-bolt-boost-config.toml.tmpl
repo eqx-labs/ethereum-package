@@ -139,8 +139,5 @@ BOLT_SIDECAR_BUILDER_PROXY_PORT = {{ .bolt_sidecar_config.builder_proxy_port }}
 # The fee recipient
 BOLT_SIDECAR_FEE_RECIPIENT = "{{ or .bolt_sidecar_config.fee_recipient "0x0000000000000000000000000000000000000000" }}"
 
-# The active validator indexes e.g 1..2
-BOLT_SIDECAR_VALIDATOR_INDEXES = "{{ or .bolt_sidecar_config.validator_indexes "0..64" }}"
-
 # Metrics port
 BOLT_SIDECAR_METRICS_PORT = {{ or .bolt_sidecar_config.metrics_port "10000" }}
