@@ -46,8 +46,6 @@ def launch_bolt_sidecar(
                 sidecar_config["constraints_api_url"],
                 "--constraints-proxy-port",
                 str(input_parser.BOLT_SIDECAR_CONSTRAINTS_PROXY_PORT),
-                "--validator-indexes",
-                "0..64",
                 "--engine-jwt-hex",
                 sidecar_config["jwt_hex"],
                 "--fee-recipient",
