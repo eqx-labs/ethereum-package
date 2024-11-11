@@ -143,10 +143,10 @@ def input_parser(plan, input_args):
         result = enrich_disable_peer_scoring(result)
 
     if result.get("mev_type") in ("mock", "full"):
-        if result.get("mev_params")["bolt_boost_image"] != None:
+        if result.get("mev_params")["bolt_sidecar_image"] == None:
             result = enrich_mev_extra_params(
                 result,
-                BOLT_BOOST_SERVICE_NAME_PREFIX,
+                MEV_BOOST_SERVICE_NAME_PREFIX,
                 FLASHBOTS_MEV_BOOST_PORT,
                 result.get("mev_type"),
             )
