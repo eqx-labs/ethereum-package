@@ -16,6 +16,7 @@ DUMMY_PUB_KEY = "0xa55c1285d84ba83a5ad26420cd5ad3091e49c55a813eee651cd467db38a8c
 
 # This is currenlty hardcoded in the Helix relay
 HELIX_RELAY_ENDPOINT_PORT = 4040
+HELIX_RELAY_WEBSITE_PORT = 8080
 
 # The min/max CPU/memory that mev-relay can use
 RELAY_MIN_CPU = 2000 # 2 cores
@@ -151,6 +152,9 @@ def launch_helix_relay(
             ports={
                 "api": PortSpec(
                     number=HELIX_RELAY_ENDPOINT_PORT, transport_protocol="TCP"
+                ),
+                "website": PortSpec(
+                    number=HELIX_RELAY_WEBSITE_PORT, transport_protocol="TCP"
                 )
             },
             env_vars=env_vars,
