@@ -163,7 +163,7 @@ def launch_helix_relay(
         ),
     )
 
-    plan.print("Launched Helix relay with configuration: {0}".format(helix_config_template_data))
+    plan.print(json.indent(json.encode(helix_config_template_data)))
 
     return "http://{0}@{1}:{2}".format(
         DUMMY_PUB_KEY, helix.ip_address, HELIX_RELAY_ENDPOINT_PORT
