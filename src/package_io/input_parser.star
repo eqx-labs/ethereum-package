@@ -262,6 +262,7 @@ def input_parser(plan, input_args):
             mev_relay_website_extra_args=result["mev_params"][
                 "mev_relay_website_extra_args"
             ],
+            helix_relay_config_extension=result["mev_params"]["helix_relay_config_extension"],
             mev_builder_extra_args=result["mev_params"]["mev_builder_extra_args"],
             mev_flood_image=result["mev_params"]["mev_flood_image"],
             mev_flood_extra_args=result["mev_params"]["mev_flood_extra_args"],
@@ -731,7 +732,8 @@ def get_default_mev_params():
         "mev_relay_api_extra_args": [],
         "mev_relay_housekeeper_extra_args": [],
         "mev_relay_website_extra_args": [],
-        "mev_builder_extra_args": [],
+        "helix_relay_config_extension": None,
+        "mev_builder_extra_args": None,
         "mev_flood_image": "flashbots/mev-flood",
         "mev_flood_extra_args": [],
         "mev_flood_seconds_per_bundle": 15,

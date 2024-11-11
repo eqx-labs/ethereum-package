@@ -112,6 +112,7 @@ def launch_helix_relay(
         network_config_dir_path_on_service,
         validator_root,
         genesis_timestamp,
+        mev_params.helix_relay_config_extension,
     )
 
     helix_config_template_and_data = shared_utils.new_template_and_data(
@@ -162,6 +163,8 @@ def launch_helix_relay(
         ),
     )
 
+    plan.print("Launched Helix relay with configuration: {0}".format(helix_config_template_data))
+
     return "http://{0}@{1}:{2}".format(
         DUMMY_PUB_KEY, helix.ip_address, HELIX_RELAY_ENDPOINT_PORT
     )
@@ -178,27 +181,34 @@ def new_config_template_data(
     network_config_dir_path,
     genesis_validator_root,
     genesis_time,
+    config_extension,
 ):
-    return {
-        "PostgresConfig": {
+    config_hashmap = {
+        "postgres": {
             "hostname": postgres_hostname,
             "port": postgres_port,
             "db_name": postgres_db_name,
             "user": postgres_user,
             "password": postgres_password,
         },
-        "RedisConfig": {
+        "redis": {
             "url": redis_url,
         },
-        "BlockSimulatorConfig": {
+        "simulator": {
             "url": blocksim_url,
         },
-        "BeaconClientsConfig": [
+        "beacon_clients": [
             {"url": uri} for uri in beacon_uris
         ],
-        "NetworkConfig": {
+        "network_config": {
             "dir_path": network_config_dir_path,
             "genesis_validator_root": genesis_validator_root,
             "genesis_time": genesis_time,
         },
     }
+
+    if config_extension != None:
+        for key, value in config_extension.items():
+            config_hashmap[key] = value
+
+    return config_hashmap
