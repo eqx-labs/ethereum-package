@@ -577,6 +577,7 @@ def run(plan, args={}):
         all_participants=all_participants,
         final_genesis_timestamp=final_genesis_timestamp,
         genesis_validators_root=genesis_validators_root,
+        mev_params=mev_params,
     )
 
     return output
