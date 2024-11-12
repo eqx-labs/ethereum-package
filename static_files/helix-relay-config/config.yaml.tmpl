@@ -1,20 +1,20 @@
 postgres:
-  hostname: {{ .PostgresConfig.hostname }}
-  port: {{ .PostgresConfig.port }}
-  db_name: {{ .PostgresConfig.db_name }}
-  user: {{ .PostgresConfig.user }}
-  password: {{ .PostgresConfig.password }}
+  hostname: {{ .postgres.hostname }}
+  port: {{ .postgres.port }}
+  db_name: {{ .postgres.db_name }}
+  user: {{ .postgres.user }}
+  password: {{ .postgres.password }}
   region: 0
   region_name: "bolt"
 
 redis:
-  url: {{ .RedisConfig.url }}
+  url: {{ .redis.url }}
 
 simulator:
-  url: {{ .BlockSimulatorConfig.url }}
+  url: {{ .simulator.url }}
 
 beacon_clients:
-  {{ range $bcConfig := .BeaconClientsConfig }}
+  {{ range $bcConfig := .beacon_clients }}
     - url: "{{ $bcConfig.url }}"
   {{- end }}
 
@@ -26,12 +26,17 @@ builders:
       is_optimistic: false
       builder_id: "Bolt Builder"
 
+{{- if .constraints_api_config }}
+constraints_api_config:
+  check_constraints_signature: {{ .constraints_api_config.check_constraints_signature }}
+  max_block_value_to_verify_wei: {{ .constraints_api_config.max_block_value_to_verify_wei }}
+{{- end }}
 
 network_config:
   !Custom # this is a custom enum type and requies a '!'
-    dir_path: {{ .NetworkConfig.dir_path }}
-    genesis_validator_root: {{ .NetworkConfig.genesis_validator_root }}
-    genesis_time: {{ .NetworkConfig.genesis_time }}
+    dir_path: {{ .network_config.dir_path }}
+    genesis_validator_root: {{ .network_config.genesis_validator_root }}
+    genesis_time: {{ .network_config.genesis_time }}
 
 # If empty, all routes are enabled
 router_config:
