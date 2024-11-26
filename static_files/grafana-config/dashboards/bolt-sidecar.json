@@ -36,10 +36,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -83,10 +80,7 @@
       "pluginVersion": "11.1.0",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "editorMode": "builder",
           "expr": "bolt_sidecar_latest_head",
           "legendFormat": "__auto",
@@ -98,10 +92,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -149,10 +140,7 @@
       "pluginVersion": "11.1.0",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "editorMode": "code",
           "exemplar": false,
           "expr": "(time() - container_start_time_seconds{name=~\"bolt-(sidecar|mev-boost|boost).*\"})/3600",
@@ -168,10 +156,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "description": "Tracks the reasons for rejecting an inclusion request.",
       "fieldConfig": {
         "defaults": {
@@ -216,10 +201,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "editorMode": "builder",
           "exemplar": false,
           "expr": "bolt_sidecar_validation_errors",
@@ -232,10 +214,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "description": "The number of preconfirmed transactions categorized by transaction type.",
       "fieldConfig": {
         "defaults": {
@@ -313,10 +292,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "editorMode": "builder",
           "expr": "bolt_sidecar_transactions_preconfirmed",
           "legendFormat": "{{type}}",
@@ -328,10 +304,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "description": "The revenue from all of the preconfirmed transactions. This is \"gross\" revenue because it just adds all of the priority fees in those transactions, which may be partly split with the builder in case of a PBS block.",
       "fieldConfig": {
         "defaults": {
@@ -409,10 +382,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "bolt_sidecar_gross_tip_revenue / 1000000000000000000",
@@ -429,10 +399,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "description": "The number of inclusion requests that were accepted (i.e. committed to).",
       "fieldConfig": {
         "defaults": {
@@ -506,10 +473,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "editorMode": "builder",
           "expr": "bolt_sidecar_inclusion_commitments_accepted",
           "legendFormat": "requests",
@@ -521,10 +485,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "description": "The number of inclusion requests received.",
       "fieldConfig": {
         "defaults": {
@@ -602,10 +563,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "editorMode": "builder",
           "expr": "bolt_sidecar_inclusion_commitments_received",
           "legendFormat": "requests",
@@ -617,10 +575,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "description": "The number of PBS blocks proposed (as opposed to local fallback blocks).",
       "fieldConfig": {
         "defaults": {
@@ -697,10 +652,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "editorMode": "builder",
           "expr": "bolt_sidecar_remote_blocks_proposed",
           "legendFormat": "blocks",
@@ -712,10 +664,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "description": "The number of fallback blocks proposed. Fallback blocks are only proposed in case of a PBS failure. If this number is high, something might be wrong.",
       "fieldConfig": {
         "defaults": {
@@ -794,10 +743,7 @@
       "pluginVersion": "9.5.12",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
@@ -829,10 +775,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -910,10 +853,7 @@
       "pluginVersion": "7.4.5",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "editorMode": "code",
           "expr": "sum(rate(container_cpu_usage_seconds_total{name=~\"bolt-sidecar.*|bolt-mev-boost.*|bolt-boost.*\"}[5m])) by (name) *100",
           "hide": false,
@@ -927,10 +867,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1008,10 +945,7 @@
       "pluginVersion": "7.4.5",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "editorMode": "code",
           "expr": "sum(container_memory_rss{name=~\"bolt-sidecar.*|bolt-boost.*|bolt-mev-boost.*\"}) by (name)",
           "hide": false,
@@ -1025,10 +959,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "description": "Total HTTP requests grouped by HTTP method & response code.",
       "fieldConfig": {
         "defaults": {
@@ -1105,10 +1036,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "editorMode": "builder",
           "expr": "bolt_sidecar_http_requests_total",
           "legendFormat": "{{method}} / {{status}}",
@@ -1120,10 +1048,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "bolt-prometheus"
-      },
+      "datasource": {},
       "description": "Request processing durations per HTTP method.",
       "fieldConfig": {
         "defaults": {
@@ -1182,10 +1107,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bolt-prometheus"
-          },
+          "datasource": {},
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "sum by(method) (bolt_sidecar_http_requests_duration_seconds)",
@@ -1213,8 +1135,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "bolt-prometheus",
-  "uid": "bolt-prometheus",
+  "title": "prometheus",
+  "uid": "prometheus",
   "version": 24,
   "weekStart": ""
 }
