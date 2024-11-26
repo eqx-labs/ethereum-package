@@ -1135,8 +1135,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "prometheus",
-  "uid": "prometheus",
+  "title": "bolt sidecar",
+  "uid": "bolt-sidecar",
   "version": 24,
   "weekStart": ""
 }
