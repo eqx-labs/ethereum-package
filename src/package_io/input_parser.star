@@ -805,7 +805,8 @@ def enrich_mev_extra_params(parsed_arguments_dict, mev_prefix, mev_port, mev_typ
         # )
 
         # connection: beacon node -> mev-boost
-        mev_url = "http://mev-sidecar-api:{0}".format(mev_port)
+        # mev_url = "http://mev-sidecar-api:{0}".format(mev_port)
+        mev_url = "http://interstate-extender:8080"
 
         if participant["cl_type"] == "lighthouse":
             participant["vc_extra_params"].append("--builder-proposals")
