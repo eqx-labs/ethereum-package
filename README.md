@@ -6,5 +6,5 @@
 ```bash
 git clone --single-branch --branch feat/cb https://github.com/interstate-labs/ethereum-package.git
 cd ethereum-package
-kurtosis run --enclave bolt-devnet ./ --args-file network_params.yaml
+kurtosis run --enclave interstate-devnet ./ --args-file network_params.yaml
 ```
