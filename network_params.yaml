@@ -53,11 +53,11 @@ mev_type: full
 mev_params:
   mev_builder_cl_image: sigp/lighthouse:latest
   # Bolt-specific images:
-  mev_relay_image: whereasjovially/interstate-relay:0.1.0
-  mev_builder_image: ghcr.io/chainbound/bolt-builder:0.1.0
+  mev_relay_image: whereasjovially/bolt-relay:0.1.0
+  mev_builder_image: whereasjovially/bolt-builder:0.1.0
 
   # Unsed images atm
-  mev_boost_image: whereasjovially/interstate-pbs-module:0.2.2
+  mev_boost_image: ghcr.io/chainbound/bolt-boost:v0.1.1-alpha
   mev_sidecar_image: ghcr.io/chainbound/bolt-sidecar:0.1.0
 
   mev_boost_args: []
