@@ -811,13 +811,15 @@ def enrich_mev_extra_params(parsed_arguments_dict, mev_prefix, mev_port, mev_typ
             index + 1, len(str(len(parsed_arguments_dict["participants"])))
         )
 
-        mev_url = "http://{0}-{1}-{2}-{3}:{4}".format(
-            mev_prefix,
-            index_str,
-            participant["cl_type"],
-            participant["el_type"],
-            mev_port,
-        )
+        # mev_url = "http://{0}-{1}-{2}-{3}:{4}".format(
+        #     mev_prefix,
+        #     index_str,
+        #     participant["cl_type"],
+        #     participant["el_type"],
+        #     mev_port,
+        # )
+
+        mev_url = "http://mev-sidecar-api:9062"
 
         if participant["cl_type"] == "lighthouse":
             participant["vc_extra_params"].append("--builder-proposals")

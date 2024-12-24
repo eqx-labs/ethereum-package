@@ -334,32 +334,42 @@ def run(plan, args={}):
                             bolt_sidecar_config["constraints_api_url"] = "http://{0}:{1}".format(
                                 bolt_boost_service_name, input_parser.FLASHBOTS_MEV_BOOST_PORT
                             )
-                        bolt_boost_context = bolt_boost.launch(
-                            plan,
-                            bolt_boost_service_name,
-                            mev_params.bolt_boost_image,
-                            relays_config,
-                            bolt_sidecar_config,
-                            network_params,
-                            final_genesis_timestamp,
-                            global_node_selectors,
+
+                        # bolt_boost_context = bolt_boost.launch(
+                        #     plan,
+                        #     bolt_boost_service_name,
+                        #     mev_params.bolt_boost_image,
+                        #     relays_config,
+                        #     bolt_sidecar_config,
+                        #     network_params,
+                        #     final_genesis_timestamp,
+                        #     global_node_selectors,
+                        # )
+                        
+                        bolt_boost_context = struct(
+                            private_ip_address="cb_pbs",
+                            port="18550",
                         )
                         all_mevboost_contexts.append(bolt_boost_context)
 
                     if bolt_sidecar_config != None:
-                        service_name = "{0}-{1}-{2}-{3}".format(
-                            input_parser.BOLT_SIDECAR_SERVICE_NAME_PREFIX,
-                            index_str,
-                            participant.cl_type,
-                            participant.el_type,
-                        )
-                        bolt_sidecar_config["service_name"] = service_name
-                        bolt_sidecar_context = bolt_sidecar.launch_bolt_sidecar(
-                            plan,
-                            mev_params.bolt_sidecar_image,
-                            bolt_sidecar_config,
-                            network_params,
-                            global_node_selectors,
+                        # service_name = "{0}-{1}-{2}-{3}".format(
+                        #     input_parser.BOLT_SIDECAR_SERVICE_NAME_PREFIX,
+                        #     index_str,
+                        #     participant.cl_type,
+                        #     participant.el_type,
+                        # )
+                        # bolt_sidecar_config["service_name"] = service_name
+                        # bolt_sidecar_context = bolt_sidecar.launch_bolt_sidecar(
+                        #     plan,
+                        #     mev_params.bolt_sidecar_image,
+                        #     bolt_sidecar_config,
+                        #     network_params,
+                        #     global_node_selectors,
+                        # )
+                        bolt_sidecar_context = struct(
+                            ip_addr="mev-sidecar-api",
+                            metrics_port_num=9063,
                         )
 
     if len(args_with_right_defaults.additional_services) == 0:
