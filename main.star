@@ -369,7 +369,7 @@ def run(plan, args={}):
                         # )
                         bolt_sidecar_context = struct(
                             ip_addr="mev-sidecar-api",
-                            metrics_port_num=9063,
+                            metrics_port_num=8018,
                         )
 
     if len(args_with_right_defaults.additional_services) == 0:
